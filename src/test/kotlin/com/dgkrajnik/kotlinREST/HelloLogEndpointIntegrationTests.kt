@@ -19,4 +19,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class HelloLogEndpointIntegrationTests {
     // I lied, there aren't actually any tests for this.
+    @Test
+    fun justAcceptPlease() {
+        return
+    }
 }

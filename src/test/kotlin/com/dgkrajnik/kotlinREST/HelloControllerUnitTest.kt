@@ -66,8 +66,7 @@ class HelloControllerUnitTest {
     fun testSpringBadGet() {
         var request = helloController.badReq(22)
         assertNotNull(request)
-        assertEquals(HttpStatus.OK, request.statusCode)
-        assertEquals("Good Stuff", request.body.jsonshim)
+        assertEquals("Good Stuff", request.jsonshim)
         try {
             helloController.badReq(21)
         } catch(ex: EntityNotFoundException) {
@@ -81,7 +80,7 @@ class HelloControllerUnitTest {
     fun testSpringBadPost() {
         var result = helloController.badPost(22)
         assertNotNull(result)
-        assertEquals("I got 22", result.body.jsonshim)
+        assertEquals("I got 22", result.jsonshim)
         try {
             helloController.badPost(23)
         } catch(ex: ValidationFailedException) {

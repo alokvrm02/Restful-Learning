@@ -1,5 +1,6 @@
-drop table if exists oauth_client_details;
-create table oauth_client_details (
+-- Details for spring oauth
+DROP TABLE IF EXISTS oauth_client_details;
+CREATE TABLE oauth_client_details (
   client_id VARCHAR(255) PRIMARY KEY,
   resource_ids VARCHAR(255),
   client_secret VARCHAR(255),
@@ -13,8 +14,8 @@ create table oauth_client_details (
   autoapprove VARCHAR(255)
 );
 
-drop table if exists oauth_client_token;
-create table oauth_client_token (
+DROP TABLE IF EXISTS oauth_client_token;
+CREATE TABLE oauth_client_token (
   token_id VARCHAR(255),
   token LONGVARBINARY,
   authentication_id VARCHAR(255) PRIMARY KEY,
@@ -22,8 +23,8 @@ create table oauth_client_token (
   client_id VARCHAR(255)
 );
 
-drop table if exists oauth_access_token;
-create table oauth_access_token (
+DROP TABLE IF EXISTS oauth_access_token;
+CREATE TABLE oauth_access_token (
   token_id VARCHAR(255),
   token LONGVARBINARY,
   authentication_id VARCHAR(255) PRIMARY KEY,
@@ -33,20 +34,20 @@ create table oauth_access_token (
   refresh_token VARCHAR(255)
 );
 
-drop table if exists oauth_refresh_token;
-create table oauth_refresh_token (
+DROP TABLE IF EXISTS oauth_refresh_token;
+CREATE TABLE oauth_refresh_token (
   token_id VARCHAR(255),
   token LONGVARBINARY,
   authentication LONGVARBINARY
 );
 
-drop table if exists oauth_code;
-create table oauth_code (
+DROP TABLE IF EXISTS oauth_code;
+CREATE TABLE oauth_code (
   code VARCHAR(255), authentication LONGVARBINARY
 );
 
-drop table if exists oauth_approvals;
-create table oauth_approvals (
+DROP TABLE IF EXISTS oauth_approvals;
+CREATE TABLE oauth_approvals (
     userId VARCHAR(255),
     clientId VARCHAR(255),
     scope VARCHAR(255),
@@ -55,8 +56,8 @@ create table oauth_approvals (
     lastModifiedAt TIMESTAMP
 );
 
-drop table if exists ClientDetails;
-create table ClientDetails (
+DROP TABLE IF EXISTS ClientDetails;
+CREATE TABLE ClientDetails (
   appId VARCHAR(255) PRIMARY KEY,
   resourceIds VARCHAR(255),
   appSecret VARCHAR(255),
@@ -68,4 +69,18 @@ create table ClientDetails (
   refresh_token_validity INTEGER,
   additionalInformation VARCHAR(4096),
   autoApproveScopes VARCHAR(255)
+);
+
+-- details for the JDBCDaoImpl
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+  username VARCHAR(255),
+  password VARCHAR(2048),
+  enabled BOOLEAN
+);
+
+DROP TABLE IF EXISTS authorities;
+CREATE TABLE authorities (
+  username VARCHAR(255),
+  authority VARCHAR(255)
 );
