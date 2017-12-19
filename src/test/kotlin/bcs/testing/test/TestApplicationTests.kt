@@ -18,7 +18,7 @@ import javax.inject.Inject
 // INTEGRATION TESTS
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class HelloEndointIntegrationTest {
+class HelloEndpointIntegrationTest {
     @Inject
     lateinit var testRestTemplate: TestRestTemplate
     @Test

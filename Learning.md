@@ -1,11 +1,14 @@
 # Learning
 
+Security w/ Oauth2.0
+- In memory is used in this tutorial. No need for a database. http://javabycode.com/spring-framework-tutorial/spring-security/secure-spring-rest-api-using-spring-security-oauth2-example.html
+
+
 # Terminology
 
 Spring IoC
 - Inversion of Control
     - Instead of having a specific bit of code call general functions, IoC uses a general container which you then put specific functions inside of it.
-    - 
 
 Spring AOP
 - Aspect Oriented Programming
@@ -27,3 +30,6 @@ MVC
     - View: Html
     - Controller: Routing
 
+Token Store
+
+JDBC
