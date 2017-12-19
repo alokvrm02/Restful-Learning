@@ -1,0 +1,4 @@
+com\restful\App.class
+com\restful\controller\GreetingController.class
+com\restful\controller\AppErrorController.class
+com\restful\services\Greeting.class
