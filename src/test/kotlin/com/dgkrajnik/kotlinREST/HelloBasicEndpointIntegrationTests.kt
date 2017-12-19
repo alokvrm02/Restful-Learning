@@ -50,7 +50,7 @@ class HelloBasicEndpointIntegrationTests {
 
     @Test
     fun testHelloDTOFailure() {
-        val authTestRestTemplate = testRestTemplate.withBasicAuth("steve", "wrongpass")
+        val authTestRestTemplate = testRestTemplate.withBasicAuth("neev", "otheruserpass")
         val result = authTestRestTemplate.getForEntity("$BASE_PATH/secureData", HelloData::class.java)
         assertNotNull(result)
         assertEquals(HttpStatus.UNAUTHORIZED, result.statusCode)

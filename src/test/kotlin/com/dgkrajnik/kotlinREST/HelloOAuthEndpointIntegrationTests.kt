@@ -2,8 +2,6 @@ package com.dgkrajnik.kotlinREST
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.boot.test.context.SpringBootTest
@@ -14,6 +12,8 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import javax.inject.Inject
 import com.fasterxml.jackson.annotation.JsonProperty
+import org.junit.Assert.*
+import org.springframework.http.converter.HttpMessageNotReadableException
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -25,7 +25,7 @@ class HelloOAuthEndpointIntegrationTests {
 
     @Test
     fun testOAuth() {
-        val loginResponse = oAuthLogin()
+        val loginResponse = oAuthLogin("neev", "otheruserpass")
         assertNotNull(loginResponse)
         assertEquals(HttpStatus.OK, loginResponse.statusCode)
     }
@@ -44,8 +44,18 @@ class HelloOAuthEndpointIntegrationTests {
     }
 
     @Test
+    fun testOAuthBadCreds() {
+        try {
+            val loginResponse = oAuthLogin("steve", "userpass")
+        } catch (e: HttpMessageNotReadableException) {
+            return
+        }
+        fail()
+    }
+
+    @Test
     fun testHelloOAuth() {
-        val loginResponse = oAuthLogin()
+        val loginResponse = oAuthLogin("neev", "otheruserpass")
         assertNotNull(loginResponse)
         assertEquals(HttpStatus.OK, loginResponse.statusCode)
 
@@ -64,12 +74,12 @@ class HelloOAuthEndpointIntegrationTests {
         assertEquals(HelloData("Hello, OAuth!"), result.body)
     }
 
-    private fun oAuthLogin(): ResponseEntity<OAuthResponse> {
+    private fun oAuthLogin(user: String, pass: String): ResponseEntity<OAuthResponse> {
         var loginHeaders = HttpHeaders()
         loginHeaders.contentType = MediaType.APPLICATION_FORM_URLENCODED
         var loginData: MultiValueMap<String, String> = LinkedMultiValueMap(mapOf(
-                "username" to listOf("neev"),
-                "password" to listOf("otheruserpass"),
+                "username" to listOf(user),
+                "password" to listOf(pass),
                 "grant_type" to listOf("password")
         ))
         val loginRequest = HttpEntity(loginData, loginHeaders)

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -15,6 +16,7 @@ import org.springframework.security.oauth2.provider.approval.TokenApprovalStore
 import org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory
 import org.springframework.security.oauth2.provider.token.TokenStore
+import javax.annotation.Resource
 import javax.inject.Inject
 import javax.sql.DataSource
 
@@ -26,20 +28,20 @@ import javax.sql.DataSource
 @Order(101)
 @EnableWebSecurity
 class AuthorizationServerSecurityConfiguration : WebSecurityConfigurerAdapter() {
-    @Bean
+    @Bean(name=["authAuthenticationManager"])
     override fun authenticationManagerBean(): AuthenticationManager {
         return super.authenticationManagerBean()
     }
 
-    @Inject
-    fun globalUserDetails(auth: AuthenticationManagerBuilder, dataSource: DataSource) {
+    @Resource(name="authDataSource")
+    private lateinit var dataSource: DataSource
+
+    override fun configure(auth: AuthenticationManagerBuilder) {
         var passwordEncoder = BCryptPasswordEncoder()
         auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder)
                 .withUser("larry").password(passwordEncoder.encode("adminpass")).roles("ADMIN")
                 .and()
                 .withUser("neev").password(passwordEncoder.encode("otheruserpass")).roles("USER")
-                .and()
-                .withUser("steve").password(passwordEncoder.encode("userpass")).roles("USER")
     }
 
     @Bean
