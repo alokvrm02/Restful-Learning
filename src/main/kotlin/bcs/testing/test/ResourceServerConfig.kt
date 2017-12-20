@@ -27,6 +27,11 @@ class Oauth2ResourceServerConfig : ResourceServerConfigurerAdapter() {
                 .access("hasRole('ADMIN')")
                 .and()
 
+                .authorizeRequests()
+                .antMatchers("/hello/service")
+                .access("hasRole('USER')")
+                .and()
+
                 .exceptionHandling().accessDeniedHandler(OAuth2AccessDeniedHandler())
     }
 }

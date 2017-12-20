@@ -65,7 +65,7 @@ class SecurityWebInitializer : WebSecurityConfigurerAdapter() {
 
     @Bean
     @Inject
-    fun userApprovalHander(tokenStore: TokenStore): TokenStoreUserApprovalHandler {
+    fun userApprovalHandler(tokenStore: TokenStore): TokenStoreUserApprovalHandler {
         var handler: TokenStoreUserApprovalHandler = TokenStoreUserApprovalHandler()
 
         handler.setTokenStore(tokenStore)
