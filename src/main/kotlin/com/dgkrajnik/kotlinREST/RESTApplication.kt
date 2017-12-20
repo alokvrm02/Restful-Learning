@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.actuate.audit.listener.AuditApplicationEvent
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.context.annotation.EnableAspectJAutoProxy
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletRequest
 
 @SpringBootApplication
 @EnableSwagger2
+@EnableAspectJAutoProxy
 class KotlinRestApplication
 
 fun main(args: Array<String>) {
@@ -41,9 +43,6 @@ fun main(args: Array<String>) {
 class SpringHelloController {
     @Inject //Inject is hip and modern.
     private lateinit var springHelloService: HelloService
-
-    @Inject
-    private lateinit var applicationEventPublisher: ApplicationEventPublisher
 
     val logger: Logger = LoggerFactory.getLogger("HelloLogger")
 
@@ -101,11 +100,18 @@ class SpringHelloController {
         return "<div style=\"position:absolute; top:50%; text-align:center; width:100%; transform:translateY(-50%);\">I'm watching you.</div>"
     }
 
+    @Auditable(AuditCode.BEING_WATCHED)
     @ApiOperation(value="An endpoint which is explicitly logged on the backend, but through a different means.")
     @GetMapping("/auditedEndpoint", produces=["text/html"])
     fun heIsWatchingYou(request: HttpServletRequest, principal: Principal?): String {
-        applicationEventPublisher.publishEvent(AuditApplicationEvent(Date(), principal?.name ?: "anon", "AUDITED_ENDPOINT_ACCESS_AND_ALSO_THIS_SHOULD_BE_AN_ENUM", mapOf("No more" to "data")))
         return """<div style="position:absolute; top:50%; text-align:center; width:100%; transform:translateY(-50%);">Ḩ̥̭͚͚̼̣̻̂̈̊͛ͫ̽͛̇̏͠Ȩ͓̭̭̱̮͕̐͑ͦ͛͐ͤͩ ̡̩͉̹̯̹̅̇̔į͈̟̰̫̓ͤ̒̊̅̀s̲ͫ͆̄̑ͨ̓͂ ̡̰̋͊́̎̅̐̇͟ͅŵ̭̲̣͉̺ͫͩ͘ą͛̈́͒̂͑͞҉͕͇̟͔̤t̲̳̰͐͆̈́͛͋ͭ͊͒̔c̶͇ͭͥ̆̂͊ͤ̿̋ḧ̗̰̯ͪͪ̀ͩ͑̐͞ͅi̵͇̫̰͗̒͜nͯ̉͋͞͏̲̙͎̠̹̘̦͢g̰̻͈̻̙̰͇͎̓̄̔́̓̔ͫ̔ ̡͉̜̞̟̉͛̓͑̈ͮ̒͢ȳ̢̩͚̼͓̤̐͛̎̈́͛ͨ̊o̯̹͈̟̻͚͒̍ͯͭͪ̂̏ͭͅu̧͈̤̟̟͉̝̟͐̔̅̿̓̇̓̚</div>"""
+    }
+
+    @Auditable(AuditCode.BEING_WATCHED)
+    @ApiOperation(value="An endpoint which is explicitly logged on the backend, but which errors out.")
+    @GetMapping("/erroringAuditedEndpoint", produces=["text/html"])
+    fun heIsABitIllToday(request: HttpServletRequest, principal: Principal?): String {
+        throw Exception("Sometheng Happoned")
     }
 }
 

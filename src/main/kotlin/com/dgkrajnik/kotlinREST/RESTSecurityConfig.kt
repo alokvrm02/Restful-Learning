@@ -58,7 +58,7 @@ class ResourceServerSecurityConfiguration : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         //@formatter:off
-        http.regexMatcher("/hello/(string|service|secureData|bad.+|throwAnError)")
+        http.regexMatcher("/hello/(string|service|secureData|bad.+|throwAnError|loggedEndpoint|auditedEndpoint|erroringAuditedEndpoint)")
                 .csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(Http401AuthenticationEntryPoint("Bearer realm=\"webrealm\""))
             .and()
@@ -69,6 +69,9 @@ class ResourceServerSecurityConfiguration : WebSecurityConfigurerAdapter() {
                     .antMatchers("/hello/badPost").permitAll()
                     .antMatchers("/hello/badRequest").permitAll()
                     .antMatchers("/hello/throwAnError").permitAll()
+                    .antMatchers("/hello/loggedEndpoint").permitAll()
+                    .antMatchers("/hello/auditedEndpoint").permitAll()
+                    .antMatchers("/hello/erroringAuditedEndpoint").permitAll()
             .and()
                 .httpBasic()
         //@formatter:on
