@@ -1,5 +1,6 @@
 package bcs.testing.test
 
+import mu.KotlinLogging
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -8,17 +9,29 @@ import javax.inject.Inject
 @RestController
 @RequestMapping("hello") // /hello route
 class HelloController {
+
+    private val log = KotlinLogging.logger {  }
+
     // Dependency injections
     @Inject
     lateinit var helloService: HelloService
 
     // Routes
     @GetMapping("/string")
-    fun helloString() = "Hello string!"
+    fun helloString(): String {
+        log.info { "hello/string accessed" }
+        return "Hello string!"
+    }
 
     @GetMapping("/service")
-    fun helloService() = helloService.getHello()
+    fun helloService(): String {
+        log.info { "hello/service accessed" }
+        return helloService.getHello()
+    }
 
     @GetMapping("/data")
-    fun helloData() = Hello("Hello data!")
+    fun helloData(): Hello {
+        log.info{ "hello/data accessed" }
+        return Hello("Hello data!")
+    }
 }

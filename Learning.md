@@ -7,6 +7,8 @@ Security w/ Oauth2.0
 Testing Oauth
 - https://docs.spring.io/spring-security/site/docs/current/reference/html/test-mockmvc.html
 
+Logging
+- https://github.com/MicroUtils/kotlin-logging/wiki
 
 # Terminology
 

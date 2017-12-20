@@ -44,4 +44,5 @@ dependencies {
 	compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	compile('org.springframework.security:spring-security-test')
+    compile('io.github.microutils:kotlin-logging:1.4.7')
 }
