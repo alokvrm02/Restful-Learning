@@ -1,5 +1,6 @@
 package com.dgkrajnik.kotlinREST
 
+import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
@@ -20,14 +21,13 @@ import javax.annotation.Resource
 import javax.inject.Inject
 import javax.sql.DataSource
 
-// Note that because this configuration is still within the same app context as the REST server, it will
-// apply to that server. The practical upshot of this is that the REST server will have the same UserDetailsManager.
-// This *can* theoretically be decoupled by providing localised authenticationManagers to each endpoint, so...
-// TODO: Decouple authenticationmanagerbeans for auth and resource server.
 @Configuration
 @Order(101)
 @EnableWebSecurity
 class AuthorizationServerSecurityConfiguration : WebSecurityConfigurerAdapter() {
+    /**
+     * 'Exports' this AuthenticationManager so that we can select it specifically elsewhere.
+     */
     @Bean(name=["authAuthenticationManager"])
     override fun authenticationManagerBean(): AuthenticationManager {
         return super.authenticationManagerBean()
@@ -36,6 +36,9 @@ class AuthorizationServerSecurityConfiguration : WebSecurityConfigurerAdapter() 
     @Resource(name="authDataSource")
     private lateinit var dataSource: DataSource
 
+    /**
+     *  Builds the AuthenticationManager specifically for the auth server, backed by its datasource.
+     */
     override fun configure(auth: AuthenticationManagerBuilder) {
         var passwordEncoder = BCryptPasswordEncoder()
         auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder)
@@ -44,6 +47,17 @@ class AuthorizationServerSecurityConfiguration : WebSecurityConfigurerAdapter() 
                 .withUser("neev").password(passwordEncoder.encode("otheruserpass")).roles("USER")
     }
 
+    /**
+     * Configure the oauth endpoints to return 401 on authentication failure.
+     */
+    override fun configure(http: HttpSecurity) {
+        http.antMatcher("/oauth/**")
+            .exceptionHandling().authenticationEntryPoint(Http401AuthenticationEntryPoint("Bearer realm=\"webrealm\""))
+    }
+
+    /**
+     * Set up tokenstore-based user approval for the auth server.
+     */
     @Bean
     @Inject
     fun userApprovalHandler(tokenStore: TokenStore, clientDetailsService: ClientDetailsService): TokenStoreUserApprovalHandler {
@@ -52,13 +66,5 @@ class AuthorizationServerSecurityConfiguration : WebSecurityConfigurerAdapter() 
         handler.setRequestFactory(DefaultOAuth2RequestFactory(clientDetailsService))
         handler.setClientDetailsService(clientDetailsService)
         return handler
-    }
-
-    @Bean
-    @Inject
-    fun approvalStore(tokenStore: TokenStore): ApprovalStore {
-        val store = TokenApprovalStore()
-        store.setTokenStore(tokenStore)
-        return store
     }
 }

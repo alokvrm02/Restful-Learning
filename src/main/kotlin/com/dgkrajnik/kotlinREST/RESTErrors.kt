@@ -22,6 +22,9 @@ data class ApiError (
     @JsonProperty("sub_errors") val subErrors: List<ApiSubError>?
 )
 
+/**
+ * Helper class to build API Errors conveniently.
+ */
 class ApiErrorBuilder {
     var status: HttpStatus? = null
     var timestamp: LocalDateTime? = null
@@ -35,6 +38,9 @@ class ApiErrorBuilder {
         this.debugMessage = ex.localizedMessage
     }
 
+    /**
+     * Adds a SubError to this Error. Automatically handles list creation.
+     */
     fun addSubError(subError: ApiSubError) {
         if (subErrors == null) {
             this.subErrors = arrayListOf(subError)
@@ -43,14 +49,23 @@ class ApiErrorBuilder {
         }
     }
 
+    /**
+     * Finalise the ApiError.
+     */
     fun build(): ApiError {
         return ApiError(status, timestamp, message, debugMessage, subErrors)
     }
 }
 
+/**
+ * Generic interface for SubErrors.
+ */
 @JsonDeserialize(using = ApiSubErrorDeserializer::class)
 interface ApiSubError {
-    // I can't use `get` because Kotlin thinks it's clever.
+    /**
+     * To work around Polymorphism Magic™, we have implementers return themselves.
+     */
+    // I can't use `get`ReturnErrorObject because Kotlin thinks it's clever.
     fun returnErrorObject(): Any
 }
 
@@ -63,6 +78,10 @@ data class ApiValidationError(val resource: String, val field: String, val rejec
     }
 }
 
+/**
+ * Jackson deserializer for ApiSubErrors
+ */
+// TODO: Super hacky and ugly; for the love of god, refine this.
 class ApiSubErrorDeserializer(vc: Class<Any>?) : StdDeserializer<ApiSubError>(vc) {
     constructor() : this(null)
 

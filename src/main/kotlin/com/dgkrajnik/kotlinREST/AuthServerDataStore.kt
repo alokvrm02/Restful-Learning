@@ -16,21 +16,35 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore
 import javax.inject.Inject
 import javax.sql.DataSource
 
+/**
+ * Generic data store for the auth server.
+ *
+ * Used for token storage and client information storage.
+ */
 @Configuration
-class AuthServerTokenStore {
-    @Value("classpath:schema.sql")
-    lateinit var schemaScript: Resource
+class AuthServerDataStore {
+    @Value("classpath:auth-schema.sql")
+    private lateinit var schemaScript: Resource
 
+    @Value("\${restful.datasource.auth.url}")
+    private lateinit var authURL: String
+
+    /**
+     * Generic populator that refreshes the database using a schema script.
+     */
     private fun databasePopulator(): DatabasePopulator {
         val populator = ResourceDatabasePopulator()
         populator.addScript(schemaScript)
         return populator
     }
 
+    /**
+     * Bean for the actual auth DataSource. Automatically populates the DB, with username SA and blank password.
+     */
     @Bean
-    @Primary
+    @Primary // Spring thinks it's clever, and needs a primary DataSource for some internal stuff.
     fun authDataSource(): DataSource {
-        val dataSource = DriverManagerDataSource("jdbc:hsqldb:file:dbs/testdb", "SA", "")
+        val dataSource = DriverManagerDataSource(authURL, "SA", "")
         databasePopulator().populate(dataSource.connection)
         return dataSource
     }

@@ -26,6 +26,9 @@ class AuditEventListener : ApplicationListener<AuditApplicationEvent> {
     val logger: Logger = LoggerFactory.getLogger("HelloLogger")
 
     override fun onApplicationEvent(event: AuditApplicationEvent) {
-        logger.info("AUDIT EVENT - ${event.auditEvent.type} - From principal - ${event.auditEvent.principal} - At ip - ${event.auditEvent.data?.get("user_ip") ?: "NONE"} - ${event.auditEvent.data?.get("exception")?.let { "Exception: $it" }}")
+        logger.info("""AUDIT EVENT - ${event.auditEvent.type}
+           | - From principal - ${event.auditEvent.principal}
+           | - At ip - ${event.auditEvent.data?.get("user_ip") ?: "NONE"}
+           | - ${event.auditEvent.data?.get("exception")?.let { "- Exception: $it" } ?: ""}")""".trimMargin("|"))
     }
 }

@@ -33,7 +33,7 @@ class KotlinRestApplication
 fun main(args: Array<String>) {
     var mapper = ObjectMapper()
             .registerModule(JavaTimeModule())
-            .setDateFormat(SimpleDateFormat("yyyy-MM-dd hh:mm:ss")) // @JsonFormat doesn't deserialise right.
+            .setDateFormat(SimpleDateFormat("yyyy-MM-dd hh:mm:ss")) // @JsonFormat doesn't deserialise datetimes right.
     SpringApplication.run(KotlinRestApplication::class.java, *args)
 }
 
@@ -120,5 +120,11 @@ class HelloService {
     fun helloAsAService() = "Hello, Service!"
 }
 
+/**
+ * A shim for testing out sending some automatically de/serialised data.
+ */
 data class HelloData(val message: String)
+/**
+ * A shim for testing out sending some automatically de/serialised data.
+ */
 data class ShimData(val jsonshim: String)

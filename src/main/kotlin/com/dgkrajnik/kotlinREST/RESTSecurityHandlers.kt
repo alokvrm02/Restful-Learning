@@ -12,7 +12,9 @@ import org.springframework.util.StringUtils
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-// Standard auth entry point.
+/**
+ * Standard auth entry point.
+ */
 @Component
 class RestAuthenticationEntryPoint : AuthenticationEntryPoint {
     override fun commence(
@@ -23,8 +25,11 @@ class RestAuthenticationEntryPoint : AuthenticationEntryPoint {
     }
 }
 
-// Handle auth requests. Handling is the same as the default success handler except
-// that we don't redirect; we send a 200 OK instead.
+/**
+ * Handle HTTP Basic Auth request success.
+ *
+ * Handling is the same as the default success handler except that we don't redirect, we send a 200 OK instead.
+ */
 class RestAuthSuccessHandler : SimpleUrlAuthenticationSuccessHandler() {
     private var requestCache: RequestCache = HttpSessionRequestCache()
 
@@ -37,7 +42,7 @@ class RestAuthSuccessHandler : SimpleUrlAuthenticationSuccessHandler() {
             clearAuthenticationAttributes(request)
             return
         } else if (isAlwaysUseDefaultTargetUrl ||
-                (targetUrlParameter != null && StringUtils.hasText(request.getParameter(targetUrlParameter)))) {
+                   (targetUrlParameter != null && StringUtils.hasText(request.getParameter(targetUrlParameter)))) {
             requestCache.removeRequest(request, response)
             clearAuthenticationAttributes(request)
             return
@@ -47,8 +52,7 @@ class RestAuthSuccessHandler : SimpleUrlAuthenticationSuccessHandler() {
     }
 
     fun setRequestCache(requestCache: RequestCache) {
-        this.requestCache = requestCache;
+        this.requestCache = requestCache
     }
 }
-
 

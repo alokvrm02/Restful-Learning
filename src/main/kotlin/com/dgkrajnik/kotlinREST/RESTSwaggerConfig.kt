@@ -11,6 +11,9 @@ import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger.web.ApiKeyVehicle
 import springfox.documentation.swagger.web.SecurityConfiguration
 
+/**
+ * Holder for Springfox's Swagger2 configuration.
+ */
 @Configuration
 class SwaggerConfig {
     @Bean
@@ -18,12 +21,15 @@ class SwaggerConfig {
         return Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.regex("/hello.*"))
+                .paths(PathSelectors.regex("/hello.*")) // Only build for our actual endpoints at /hello/**
                 .build()
                 .securitySchemes(listOf(securitySchema()))
                 .securityContexts(listOf(securityContext()))
     }
 
+    /**
+     * Configure Springfox's option to automatically place an oauth login button on HTML documentation.
+     */
     private fun securitySchema(): OAuth {
         val loginEndpoint: LoginEndpoint = LoginEndpoint("/oauth/authorize")
         val grantType: GrantType = ImplicitGrant(loginEndpoint, "swaggerAuth")
@@ -39,6 +45,9 @@ class SwaggerConfig {
         return listOf(SecurityReference("oauth2", arrayOf(authorizationScope)))
     }
 
+    /**
+     * Configure Springfox's auth details.
+     */
     @Bean
     fun securityInfo(): SecurityConfiguration {
         return SecurityConfiguration("normalClient", "spookysecret", "realm", "spring-hello", "", ApiKeyVehicle.HEADER, "api_key",",");

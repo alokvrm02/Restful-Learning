@@ -23,11 +23,19 @@ import javax.inject.Inject
 import javax.inject.Named
 import javax.sql.DataSource
 
+/**
+ * Configuration for the resource server, and oauth-guarded endpoints.
+ */
 @Configuration
 @EnableResourceServer
 class WebSecurityConfig : ResourceServerConfigurerAdapter() {
-    @Primary
+    /**
+     * Configure the resource server to poll the auth server to check tokens.
+     *
+     * Note that the auth server url is hardcoded, *including the port*.
+     */
     @Bean
+    @Primary
     fun tokenService(): RemoteTokenServices {
         val tokenService = RemoteTokenServices()
         // Note that, because the server port is set *after*
@@ -39,6 +47,9 @@ class WebSecurityConfig : ResourceServerConfigurerAdapter() {
         return tokenService
     }
 
+    /**
+     * Configure the endpoints that need to be secured by oauth.
+     */
     override fun configure(http: HttpSecurity) {
         //@formatter:off
         http.antMatcher("/hello/secureOAuthData")
@@ -51,15 +62,31 @@ class WebSecurityConfig : ResourceServerConfigurerAdapter() {
     }
 }
 
+/**
+ * Configuration for HTTP Basic user detail storage, and for HTTP Basic-secured and unsecured endpoints.
+ */
 @Configuration
 class ResourceServerSecurityConfiguration : WebSecurityConfigurerAdapter() {
     @Resource(name="resourceDataSource")
     private lateinit var dataSource: DataSource
 
+    /**
+     * Configure the endpoints that are secured by HTTP Basic Auth or which are unsecured.
+     */
     override fun configure(http: HttpSecurity) {
         //@formatter:off
-        http.regexMatcher("/hello/(string|service|secureData|bad.+|throwAnError|loggedEndpoint|auditedEndpoint|erroringAuditedEndpoint)")
+        http.requestMatchers()
+                .antMatchers("/hello/string")
+                .antMatchers("/hello/service")
+                .antMatchers("/hello/secureData")
+                .antMatchers("/hello/bad*")
+                .antMatchers("/hello/throwAnError")
+                .antMatchers("/hello/loggedEndpoint")
+                .antMatchers("/hello/auditedEndpoint")
+                .antMatchers("/hello/erroringAuditedEndpoint)")
+            .and()
                 .csrf().disable()
+                // Set up exception handling to automatically return HTTP 401 on failure rather than a redirect.
                 .exceptionHandling().authenticationEntryPoint(Http401AuthenticationEntryPoint("Bearer realm=\"webrealm\""))
             .and()
                 .authorizeRequests()
@@ -77,6 +104,9 @@ class ResourceServerSecurityConfiguration : WebSecurityConfigurerAdapter() {
         //@formatter:on
     }
 
+    /**
+     * Configure HTTP Basic users.
+     */
     override fun configure(auth: AuthenticationManagerBuilder) {
         var passwordEncoder = BCryptPasswordEncoder()
         auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder)
@@ -84,6 +114,10 @@ class ResourceServerSecurityConfiguration : WebSecurityConfigurerAdapter() {
     }
 }
 
+/**
+ * Configuration to enable annotation-based method security.
+ * Currently disabled.
+ */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 class MethodSecurityConfig : GlobalMethodSecurityConfiguration() {

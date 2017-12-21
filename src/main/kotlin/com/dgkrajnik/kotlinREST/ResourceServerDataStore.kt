@@ -17,10 +17,21 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore
 import javax.inject.Inject
 import javax.sql.DataSource
 
+/**
+ * Generic data store for the resource server.
+ *
+ * Mostly used for user details, for authorization after authentication.
+ * Also refer to AuthServerDataStore; this class is very similar.
+ *
+ * @See AuthServerDataStore
+ */
 @Configuration
 class ResourceServerDataStore {
-    @Value("classpath:schema.sql")
+    @Value("classpath:resource-schema.sql")
     lateinit var schemaScript: Resource
+
+    @Value("\${restful.datasource.resource.url}")
+    private lateinit var resourceURL: String
 
     private fun resourceDatabasePopulator(): DatabasePopulator {
         val populator = ResourceDatabasePopulator()
@@ -30,7 +41,7 @@ class ResourceServerDataStore {
 
     @Bean
     fun resourceDataSource(): DataSource {
-        val dataSource = DriverManagerDataSource("jdbc:hsqldb:file:dbs/testresourcedb", "SA", "")
+        val dataSource = DriverManagerDataSource(resourceURL, "SA", "")
         resourceDatabasePopulator().populate(dataSource.connection)
         return dataSource
     }
