@@ -29,6 +29,7 @@ class AuditEventListener : ApplicationListener<AuditApplicationEvent> {
         logger.info("""AUDIT EVENT - ${event.auditEvent.type}
            | - From principal - ${event.auditEvent.principal}
            | - At ip - ${event.auditEvent.data?.get("user_ip") ?: "NONE"}
-           | - ${event.auditEvent.data?.get("exception")?.let { "- Exception: $it" } ?: ""}")""".trimMargin("|"))
+           |${event.auditEvent.data?.get("exception")?.let { " - Exception: $it" } ?: ""}"""
+                .trimMargin("|").replace("\n", ""))
     }
 }
