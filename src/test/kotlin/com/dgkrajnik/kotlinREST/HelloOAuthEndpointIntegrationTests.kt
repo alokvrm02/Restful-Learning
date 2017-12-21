@@ -74,6 +74,13 @@ class HelloOAuthEndpointIntegrationTests {
         assertEquals(HelloData("Hello, OAuth!"), result.body)
     }
 
+    @Test
+    fun testOAuthImplicit() {
+        val loginResponse = oAuthImplicitLogin("neev", "otheruserpass")
+        assertNotNull(loginResponse)
+        assertEquals(HttpStatus.OK, loginResponse.statusCode)
+    }
+
     private fun oAuthLogin(user: String, pass: String): ResponseEntity<OAuthResponse> {
         var loginHeaders = HttpHeaders()
         loginHeaders.contentType = MediaType.APPLICATION_FORM_URLENCODED
@@ -86,6 +93,13 @@ class HelloOAuthEndpointIntegrationTests {
         val loginResponse = testRestTemplate
                 .withBasicAuth("normalClient", "spookysecret")
                 .postForEntity("/oauth/token", loginRequest, OAuthResponse::class.java)
+        return loginResponse
+    }
+
+    private fun oAuthImplicitLogin(user: String, pass: String): ResponseEntity<String> {
+        val loginResponse = testRestTemplate
+                .withBasicAuth(user, pass)
+                .getForEntity("/oauth/authorize?grant_type=implicit&response_type=token&client_id=normalClient&redirect_uri=http://localhost:8080/nul", String::class.java)
         return loginResponse
     }
 
