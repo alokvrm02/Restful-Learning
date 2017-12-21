@@ -1,4 +1,4 @@
-package bcs.testing.test
+package bcs.testing.test.REST.Controller
 
 // Data class = struct
 data class Hello(val message: String)

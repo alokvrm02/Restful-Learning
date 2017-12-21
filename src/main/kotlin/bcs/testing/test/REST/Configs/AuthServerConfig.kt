@@ -1,4 +1,4 @@
-package bcs.testing.test
+package bcs.testing.test.REST.Configs
 
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Configuration

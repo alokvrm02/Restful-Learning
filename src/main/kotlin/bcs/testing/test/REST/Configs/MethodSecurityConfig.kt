@@ -1,4 +1,4 @@
-package bcs.testing.test
+package bcs.testing.test.REST.Configs
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler

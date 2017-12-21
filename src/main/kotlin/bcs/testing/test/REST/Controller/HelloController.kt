@@ -1,5 +1,6 @@
-package bcs.testing.test
+package bcs.testing.test.REST.Controller
 
+import bcs.testing.test.REST.HelloService
 import mu.KotlinLogging
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -33,5 +34,11 @@ class HelloController {
     fun helloData(): Hello {
         log.info{ "hello/data accessed" }
         return Hello("Hello data!")
+    }
+
+    @GetMapping("/unsecured")
+    fun helloUnprotected(): String {
+        log.info { "hello/unprotected accessed" }
+        return "Beep boop"
     }
 }

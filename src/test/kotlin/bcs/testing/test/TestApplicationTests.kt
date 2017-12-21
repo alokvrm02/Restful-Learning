@@ -1,5 +1,8 @@
 package bcs.testing.test
 
+import bcs.testing.test.REST.Controller.Hello
+import bcs.testing.test.REST.Controller.HelloController
+import bcs.testing.test.REST.HelloService
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -38,6 +41,13 @@ class HelloEndpointIntegrationTest {
 
     @Inject
     lateinit var mockmvc: MockMvc
+
+    @Test
+    fun testNonSecured() {
+        mockmvc.perform(get("/hello/unsecured"))
+                .andExpect(status().isOk)
+                .andExpect(content().string(containsString("Beep boop")))
+    }
 
     @Test
     fun noToken() {

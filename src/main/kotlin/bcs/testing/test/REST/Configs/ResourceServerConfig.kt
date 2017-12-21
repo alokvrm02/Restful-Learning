@@ -1,4 +1,4 @@
-package bcs.testing.test
+package bcs.testing.test.REST.Configs
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -19,7 +19,8 @@ class Oauth2ResourceServerConfig : ResourceServerConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
         http
                 .anonymous().disable()
-                .requestMatchers().antMatchers("/hello/**")
+                .requestMatchers().antMatchers("/hello/string", "/hello/service",
+                                                    "/hello/data")
                 .and()
 
                 .authorizeRequests()

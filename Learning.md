@@ -2,10 +2,14 @@
 
 Security w/ Oauth2.0
 - In memory is used in this tutorial. No need for a database. http://javabycode.com/spring-framework-tutorial/spring-security/secure-spring-rest-api-using-spring-security-oauth2-example.html
-- Looks like http://www.bubblecode.net/wp-content/uploads/2013/03/password.png
+- ![](http://www.bubblecode.net/wp-content/uploads/2013/03/password.png)
 
 Testing Oauth
 - https://docs.spring.io/spring-security/site/docs/current/reference/html/test-mockmvc.html
+
+Exception Handling
+- https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc
+- https://github.com/magiccrafter/spring-boot-exception-handling
 
 Logging
 - https://github.com/MicroUtils/kotlin-logging/wiki

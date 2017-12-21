@@ -1,4 +1,4 @@
-package bcs.testing.test
+package bcs.testing.test.REST
 
 import org.springframework.stereotype.Service
 
