@@ -25,7 +25,7 @@ class GlobalControllerExceptionHandler {
     @ExceptionHandler(Exception::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun unknownException(ex: Exception, req: WebRequest): ErrorResponse {
-        log.info { "Unhandled Error - 5002" }
-        return ErrorResponse(500, 5002, ex.message)
+        log.info { "Unhandled Error - 5001" }
+        return ErrorResponse(500, 5001, ex.message)
     }
 }

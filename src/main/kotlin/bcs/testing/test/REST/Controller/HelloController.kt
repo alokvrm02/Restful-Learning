@@ -1,5 +1,6 @@
 package bcs.testing.test.REST.Controller
 
+import io.swagger.annotations.ApiOperation
 import mu.KotlinLogging
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,6 +18,7 @@ class HelloController {
     lateinit var helloService: HelloService
 
     // Routes
+    @ApiOperation(value = "getHelloString", nickname = "getHelloString")
     @GetMapping("/string")
     fun helloString(): String {
         log.info { "hello/string accessed" }

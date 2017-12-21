@@ -45,4 +45,6 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	compile('org.springframework.security:spring-security-test')
     compile('io.github.microutils:kotlin-logging:1.4.7')
+    compile("io.springfox:springfox-swagger2:2.7.0")
+    compile("io.springfox:springfox-swagger-ui:2.7.0")
 }

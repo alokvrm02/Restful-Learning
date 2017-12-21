@@ -14,6 +14,11 @@ Exception Handling
 Logging
 - https://github.com/MicroUtils/kotlin-logging/wiki
 
+Swagger Documentation
+- http://heidloff.net/article/usage-of-swagger-2-0-in-spring-boot-applications-to-document-apis/
+- https://github.com/springfox/springfox
+- http://springfox.github.io/springfox/docs/current/
+
 # Terminology
 
 Spring IoC
