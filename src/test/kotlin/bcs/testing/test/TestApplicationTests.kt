@@ -2,7 +2,7 @@ package bcs.testing.test
 
 import bcs.testing.test.REST.Controller.Hello
 import bcs.testing.test.REST.Controller.HelloController
-import bcs.testing.test.REST.HelloService
+import bcs.testing.test.REST.Controller.HelloService
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -90,6 +90,13 @@ class HelloEndpointIntegrationTest {
                 .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk)
                 .andExpect(content().string(containsString("Hello data!")))
+    }
+
+    @Test
+    fun test404Response() {
+        mockmvc.perform(get("/hotdog/cookie"))
+                .andExpect(status().isNotFound)
+                .andExpect(content().string(containsString("404")))
     }
 
     /**

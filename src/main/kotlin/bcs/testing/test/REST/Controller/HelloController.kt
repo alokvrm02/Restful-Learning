@@ -1,6 +1,5 @@
 package bcs.testing.test.REST.Controller
 
-import bcs.testing.test.REST.HelloService
 import mu.KotlinLogging
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
