@@ -72,7 +72,7 @@ interface ApiSubError {
 /**
  * An ApiSubError for when submitted data fails to validate correctly.
  */
-data class ApiValidationError(val resource: String, val field: String, val rejectedValue: Any, val message: String): ApiSubError {
+data class ApiValidationError(val resource: String, val field: String, val rejectedValue: Any?, val message: String): ApiSubError {
     override fun returnErrorObject(): Any {
         return this
     }
@@ -103,7 +103,10 @@ class ApiSubErrorDeserializer(vc: Class<Any>?) : StdDeserializer<ApiSubError>(vc
  * Exception thrown when a requested entity doesn't exist.
  */
 class EntityNotFoundException(message: String) : Exception(message)
-class ValidationFailedException(val resource: String, val field: String, val rejectedValue: Any, val hint: String?) : Exception(hint) {
+/**
+ * Exception thrown when the user submits input that fails validation.
+ */
+class ValidationFailedException(val resource: String, val field: String, val rejectedValue: Any?, val hint: String?) : Exception(hint) {
     fun asApiValidationError(): ApiValidationError {
         val message = hint ?: "No advice"
         return ApiValidationError(this.resource, field, rejectedValue, message)

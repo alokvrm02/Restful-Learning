@@ -23,7 +23,7 @@ enum class AuditCode {
 
 @Component
 class AuditEventListener : ApplicationListener<AuditApplicationEvent> {
-    val logger: Logger = LoggerFactory.getLogger("HelloLogger")
+    val logger: Logger = LoggerFactory.getLogger("Audits")
 
     override fun onApplicationEvent(event: AuditApplicationEvent) {
         logger.info("""AUDIT EVENT - ${event.auditEvent.type}

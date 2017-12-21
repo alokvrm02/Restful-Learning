@@ -52,7 +52,7 @@ class AuthorizationServerSecurityConfiguration : WebSecurityConfigurerAdapter() 
      */
     override fun configure(http: HttpSecurity) {
         http.antMatcher("/oauth/**")
-            .exceptionHandling().authenticationEntryPoint(Http401AuthenticationEntryPoint("Bearer realm=\"webrealm\""))
+                .httpBasic()
     }
 
     /**

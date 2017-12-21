@@ -84,8 +84,8 @@ class SpringHelloController {
 
     @ApiOperation(value="A POST endpoint which throws an error if you provide it a reqparam > 22.")
     @PostMapping("/badPost", produces=["application/json"])
-    fun badPost(@RequestParam("reqparam", required=false) requestParam: Int): ShimData {
-        if (requestParam > 22) {
+    fun badPost(@RequestParam("reqparam", required=false) requestParam: Int?): ShimData {
+        if (requestParam == null || requestParam > 22) {
             throw ValidationFailedException("request", "reqparam", requestParam, "Value must be <= 22")
         } else {
             return ShimData("I got $requestParam")
@@ -109,9 +109,10 @@ class SpringHelloController {
 
     @Auditable(AuditCode.BEING_WATCHED)
     @ApiOperation(value="An endpoint which is explicitly logged on the backend, but which errors out.")
-    @GetMapping("/erroringAuditedEndpoint", produces=["text/html"])
-    fun heIsABitIllToday(request: HttpServletRequest, principal: Principal?): String {
-        throw Exception("Sometheng Happoned")
+    @GetMapping("/erroringAuditedEndpoint", produces=["application/json", "text/html"])
+    fun heIsABitIllToday() {
+        // We throw an Entity Not Found Exception for no other reason than because we already have a handler, so the log is cleaner.
+        throw EntityNotFoundException("Sometheng Happoned")
     }
 }
 
