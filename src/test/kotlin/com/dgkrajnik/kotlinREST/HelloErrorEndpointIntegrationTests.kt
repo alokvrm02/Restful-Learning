@@ -14,42 +14,67 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import javax.inject.Inject
 import com.fasterxml.jackson.annotation.JsonProperty
+import org.junit.Before
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity
+import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.web.WebAppConfiguration
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import org.springframework.web.context.WebApplicationContext
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
+/**
+ * Tests to check that error handling is working as expected.
+ */
 @RunWith(SpringRunner::class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@ContextConfiguration
+@WebAppConfiguration
 class HelloErrorEndpointIntegrationTests {
+    @Inject
+    private lateinit var context: WebApplicationContext
+
+    private lateinit var mvc: MockMvc
+
+    @Before
+    fun setup() {
+        mvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply<DefaultMockMvcBuilder>(springSecurity())
+                .build()
+    }
+
     val BASE_PATH = "/hello"
-    val mapper = ObjectMapper().registerModule(KotlinModule())
-	@Inject
-	lateinit var testRestTemplate: TestRestTemplate
 
     @Test
     fun testErrorHandling() {
-        val error = testRestTemplate.getForEntity("$BASE_PATH/throwAnError", ApiError::class.java)
-        assertEquals(HttpStatus.BAD_REQUEST, error.statusCode)
-        assertEquals("Malformed JSON Request", error.body.message)
-        assertEquals("Wink wonk", error.body.debugMessage)
+        mvc.perform(get("$BASE_PATH/throwAnError"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Malformed JSON Request"))
+                .andExpect(jsonPath("$.debug_message").value("Wink wonk"))
     }
 
     @Test
     fun testCustomErrorHandling() {
-        val error = testRestTemplate.getForEntity("$BASE_PATH/badRequest", ApiError::class.java)
-        assertEquals(HttpStatus.NOT_FOUND, error.statusCode)
-        assertEquals("Entity Not Found", error.body.message)
-        assertEquals("Entity null != 22 not found.", error.body.debugMessage)
+        mvc.perform(get("$BASE_PATH/badRequest"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Entity Not Found"))
+                .andExpect(jsonPath("$.debug_message").value("Entity null != 22 not found."))
     }
 
     @Test
     fun testCustomVerificationErrorHandling() {
-        var loginHeaders = HttpHeaders()
-        loginHeaders.contentType = MediaType.APPLICATION_FORM_URLENCODED
-        var loginData: MultiValueMap<String, String> = LinkedMultiValueMap(mapOf(
-                "reqparam" to listOf("24")
-        ))
-        val loginRequest = HttpEntity(loginData, loginHeaders)
-        val error = testRestTemplate.postForEntity("$BASE_PATH/badPost", loginRequest, ApiError::class.java)
-        assertEquals(HttpStatus.BAD_REQUEST, error.statusCode)
-        assertEquals("Error in Request Data", error.body.message)
-        assertEquals(24, (error.body.subErrors?.get(0)?.returnErrorObject() as ApiValidationError).rejectedValue)
+        mvc.perform(post("$BASE_PATH/badPost").param("reqparam", "24"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Error in Request Data"))
+                .andExpect(jsonPath("$.sub_errors[0].rejected_value").value(24))
     }
 }

@@ -14,45 +14,68 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import javax.inject.Inject
 import com.fasterxml.jackson.annotation.JsonProperty
+import org.junit.Before
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity
+import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.web.WebAppConfiguration
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import org.springframework.web.context.WebApplicationContext
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
+/**
+ * Simple tests on basic endpoints to check that the system is at a basic level of configuration.
+ */
 @RunWith(SpringRunner::class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@ContextConfiguration
+@WebAppConfiguration
 class HelloBasicEndpointIntegrationTests {
+    @Inject
+    private lateinit var context: WebApplicationContext
+
+    private lateinit var mvc: MockMvc
+
+    @Before
+    fun setup() {
+        mvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply<DefaultMockMvcBuilder>(springSecurity())
+                .build()
+    }
+
     val BASE_PATH = "/hello"
-    val mapper = ObjectMapper().registerModule(KotlinModule())
-	@Inject
-	lateinit var testRestTemplate: TestRestTemplate
 
 	@Test
     fun testHelloController() {
-        val result = testRestTemplate.getForEntity("$BASE_PATH/string", String::class.java)
-        assertNotNull(result)
-        assertEquals(HttpStatus.OK, result.statusCode)
-        assertEquals("Hello, Spring!", result.body)
+        mvc.perform(get("$BASE_PATH/string"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("text/plain;charset=UTF-8"))
+                .andExpect(content().string("Hello, Spring!"))
     }
 
     @Test
     fun testHelloService() {
-        val result = testRestTemplate.getForEntity("$BASE_PATH/service", String::class.java)
-        assertNotNull(result)
-        assertEquals(HttpStatus.OK, result.statusCode)
-        assertEquals("Hello, Service!", result.body)
+        mvc.perform(get("$BASE_PATH/service"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("text/plain;charset=UTF-8"))
+                .andExpect(content().string("Hello, Service!"))
     }
 
     @Test
     fun testHelloDTO() {
-        val result = testRestTemplate
-                .withBasicAuth("steve", "userpass")
-                .getForEntity("$BASE_PATH/secureData", HelloData::class.java)
-        assertEquals(HttpStatus.OK, result.statusCode)
-        assertEquals(HelloData("Hello, Data!"), result.body)
+        mvc.perform(get("$BASE_PATH/secureData").with(httpBasic("steve", "userpass")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.message").value("Hello, Data!"))
     }
 
     @Test
     fun testHelloDTOFailure() {
-        val authTestRestTemplate = testRestTemplate.withBasicAuth("neev", "otheruserpass")
-        val result = authTestRestTemplate.getForEntity("$BASE_PATH/secureData", HelloData::class.java)
-        assertNotNull(result)
-        assertEquals(HttpStatus.UNAUTHORIZED, result.statusCode)
+        mvc.perform(get("$BASE_PATH/secureData").with(httpBasic("neev", "otheruserpass")))
+                .andExpect(status().isUnauthorized())
     }
 }

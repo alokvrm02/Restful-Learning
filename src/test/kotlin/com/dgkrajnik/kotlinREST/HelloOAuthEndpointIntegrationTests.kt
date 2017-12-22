@@ -15,11 +15,19 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import org.junit.Assert.*
 import org.springframework.http.converter.HttpMessageNotReadableException
 
+/**
+ * Tests to verify that the oauth-secured endpoints work.
+ */
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class HelloOAuthEndpointIntegrationTests {
+    /*
+     * These tests *could* be done in mockmvc too, but getting them to work is somewhat finicky. One of the biggest issues
+     * is that the resource server makes http requests to a static URL to do the token checking, and this obviously won't
+     * work in a mock container. While this could be fixed, it's ultimately more work than just puppeteering a server.
+     */
     val BASE_PATH = "/hello"
-    val mapper = ObjectMapper().registerModule(KotlinModule())
+
 	@Inject
 	lateinit var testRestTemplate: TestRestTemplate
 

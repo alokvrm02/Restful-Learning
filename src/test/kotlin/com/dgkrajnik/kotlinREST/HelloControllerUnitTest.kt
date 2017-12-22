@@ -14,6 +14,9 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.test.context.junit4.SpringRunner
 
+/**
+ * Unit tests for the controller's endpoints.
+ */
 @RunWith(MockitoJUnitRunner::class)
 class HelloControllerUnitTest {
     @InjectMocks

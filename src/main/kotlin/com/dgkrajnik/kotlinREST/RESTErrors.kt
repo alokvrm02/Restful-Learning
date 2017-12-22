@@ -72,7 +72,12 @@ interface ApiSubError {
 /**
  * An ApiSubError for when submitted data fails to validate correctly.
  */
-data class ApiValidationError(val resource: String, val field: String, val rejectedValue: Any?, val message: String): ApiSubError {
+data class ApiValidationError(
+        val resource: String,
+        val field: String,
+        @JsonProperty("rejected_value") val rejectedValue: Any?,
+        val message: String
+): ApiSubError {
     override fun returnErrorObject(): Any {
         return this
     }
@@ -87,11 +92,11 @@ class ApiSubErrorDeserializer(vc: Class<Any>?) : StdDeserializer<ApiSubError>(vc
 
     override fun deserialize(parser: JsonParser, context: DeserializationContext) : ApiSubError {
         val node: JsonNode = parser.codec.readTree(parser)
-        if (node.has("rejectedValue")) {
+        if (node.has("rejected_value")) {
             return ApiValidationError(
                     node.get("resource").asText(),
                     node.get("field").asText(),
-                    node.get("rejectedValue").numberValue() ?: node.get("rejectedValue").asText(),
+                    node.get("rejected_value").numberValue() ?: node.get("rejected_value").asText(),
                     node.get("message").asText()
             )
         }
@@ -106,7 +111,12 @@ class EntityNotFoundException(message: String) : Exception(message)
 /**
  * Exception thrown when the user submits input that fails validation.
  */
-class ValidationFailedException(val resource: String, val field: String, val rejectedValue: Any?, val hint: String?) : Exception(hint) {
+class ValidationFailedException(
+        val resource: String,
+        val field: String,
+        @JsonProperty("rejected_value") val rejectedValue: Any?,
+        val hint: String?
+) : Exception(hint) {
     fun asApiValidationError(): ApiValidationError {
         val message = hint ?: "No advice"
         return ApiValidationError(this.resource, field, rejectedValue, message)
