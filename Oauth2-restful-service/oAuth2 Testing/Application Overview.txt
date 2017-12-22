@@ -1,0 +1,13 @@
+Application Notes:
+
+This Application uses OAUTh2 security implemented. A Rest endpoint has been created using "spring-boot-starter-jdbc" and Mysql database is used as a backend.
+
+This application is built in pure Spring boot. In memory client has been used to validate the user credentials during oAuth2 security cycle.
+
+1). Client intitiates a request
+2). Request goes to AuthorizationServer which validates the Request and generates an access_toeken, An access token is sent back to the client.
+3). Client access the endpoint using the access token provided by oAuth2 in step1
+
+Postman is used for the testing purposes
+
+
