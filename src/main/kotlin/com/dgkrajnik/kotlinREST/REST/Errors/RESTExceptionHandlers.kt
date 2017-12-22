@@ -1,5 +1,9 @@
-package com.dgkrajnik.kotlinREST
+package com.dgkrajnik.kotlinREST.REST.Errors
 
+import com.dgkrajnik.kotlinREST.REST.Errors.ApiError
+import com.dgkrajnik.kotlinREST.REST.Errors.ApiErrorBuilder
+import com.dgkrajnik.kotlinREST.REST.Errors.EntityNotFoundException
+import com.dgkrajnik.kotlinREST.REST.Errors.ValidationFailedException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -48,7 +52,7 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(ValidationFailedException::class)
     protected fun handleValidationFailed(ex: ValidationFailedException): ResponseEntity<Any> {
         val error = "Error in Request Data"
-        val apiError = ApiErrorBuilder(HttpStatus.BAD_REQUEST, error , ex)
+        val apiError = ApiErrorBuilder(HttpStatus.BAD_REQUEST, error, ex)
         apiError.addSubError(ex.asApiValidationError())
         return buildResponseEntity(apiError.build())
     }

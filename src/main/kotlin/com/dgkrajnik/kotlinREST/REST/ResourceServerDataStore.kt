@@ -1,4 +1,4 @@
-package com.dgkrajnik.kotlinREST
+package com.dgkrajnik.kotlinREST.REST
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties

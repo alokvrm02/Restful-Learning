@@ -1,4 +1,4 @@
-package com.dgkrajnik.kotlinREST
+package com.dgkrajnik.kotlinREST.Auth
 
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint
 import org.springframework.context.annotation.Bean

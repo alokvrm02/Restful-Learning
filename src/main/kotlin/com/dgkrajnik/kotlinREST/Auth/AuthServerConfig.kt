@@ -1,4 +1,4 @@
-package com.dgkrajnik.kotlinREST
+package com.dgkrajnik.kotlinREST.Auth
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

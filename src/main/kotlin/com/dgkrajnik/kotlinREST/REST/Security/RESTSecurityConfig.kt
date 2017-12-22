@@ -1,11 +1,11 @@
-package com.dgkrajnik.kotlinREST
+package com.dgkrajnik.kotlinREST.REST.Security
 
+import com.dgkrajnik.kotlinREST.Auth.AuthorizationServerSecurityConfiguration
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler
-import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration
@@ -16,11 +16,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter
 import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import javax.annotation.Resource
-import javax.inject.Inject
-import javax.inject.Named
 import javax.sql.DataSource
 
 /**

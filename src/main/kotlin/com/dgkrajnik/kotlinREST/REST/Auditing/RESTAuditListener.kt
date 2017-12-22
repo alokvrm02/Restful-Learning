@@ -1,4 +1,4 @@
-package com.dgkrajnik.kotlinREST
+package com.dgkrajnik.kotlinREST.REST.Auditing
 
 import org.slf4j.LoggerFactory
 import org.slf4j.Logger

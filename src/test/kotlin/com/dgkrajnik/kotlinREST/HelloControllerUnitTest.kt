@@ -1,18 +1,15 @@
 package com.dgkrajnik.kotlinREST
 
-import com.sun.xml.internal.ws.developer.MemberSubmissionAddressing
+import com.dgkrajnik.kotlinREST.REST.Errors.EntityNotFoundException
+import com.dgkrajnik.kotlinREST.REST.Errors.ValidationFailedException
 import org.junit.Assert.*
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.doReturn
 import org.mockito.runners.MockitoJUnitRunner
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.http.HttpStatus
 import org.springframework.http.converter.HttpMessageNotReadableException
-import org.springframework.test.context.junit4.SpringRunner
 
 /**
  * Unit tests for the controller's endpoints.

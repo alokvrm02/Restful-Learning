@@ -1,11 +1,9 @@
-package com.dgkrajnik.kotlinREST
+package com.dgkrajnik.kotlinREST.REST.Auditing
 
 import org.aspectj.lang.annotation.*
 import org.springframework.boot.actuate.audit.listener.AuditApplicationEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
-import java.lang.annotation.ElementType
-import java.lang.annotation.RetentionPolicy
 import java.security.Principal
 import java.util.*
 import javax.inject.Inject

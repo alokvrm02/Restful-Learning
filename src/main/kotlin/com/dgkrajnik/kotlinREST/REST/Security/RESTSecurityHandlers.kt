@@ -1,4 +1,4 @@
-package com.dgkrajnik.kotlinREST
+package com.dgkrajnik.kotlinREST.REST.Security
 
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException

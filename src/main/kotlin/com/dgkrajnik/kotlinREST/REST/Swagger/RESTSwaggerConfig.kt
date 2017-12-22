@@ -1,7 +1,9 @@
-package com.dgkrajnik.kotlinREST
+package com.dgkrajnik.kotlinREST.REST.Swagger
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.builders.RequestHandlerSelectors
 import springfox.documentation.service.*
@@ -51,5 +53,18 @@ class SwaggerConfig {
     @Bean
     fun securityInfo(): SecurityConfiguration {
         return SecurityConfiguration("normalClient", "spookysecret", "realm", "spring-hello", "", ApiKeyVehicle.HEADER, "api_key",",");
+    }
+}
+
+@Configuration
+class swaggerStaticEndpoints : WebMvcConfigurerAdapter() {
+    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
+        //tyvm harrison
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+
     }
 }

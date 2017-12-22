@@ -1,5 +1,9 @@
 package com.dgkrajnik.kotlinREST
 
+import com.dgkrajnik.kotlinREST.REST.Auditing.AuditCode
+import com.dgkrajnik.kotlinREST.REST.Auditing.Auditable
+import com.dgkrajnik.kotlinREST.REST.Errors.EntityNotFoundException
+import com.dgkrajnik.kotlinREST.REST.Errors.ValidationFailedException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.swagger.annotations.Api
@@ -7,26 +11,14 @@ import io.swagger.annotations.ApiOperation
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.SpringApplication
-import org.springframework.boot.actuate.audit.listener.AuditApplicationEvent
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.context.ApplicationEventPublisher
-import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.EnableAspectJAutoProxy
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
-import org.springframework.stereotype.Controller
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
-import org.springframework.web.servlet.resource.ResourceHttpRequestHandler
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 import java.security.Principal
 import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 import javax.servlet.http.HttpServletRequest
 
@@ -134,16 +126,3 @@ data class HelloData(val message: String)
  * A shim for testing out sending some automatically de/serialised data.
  */
 data class ShimData(val jsonshim: String)
-
-@Configuration
-class notWorking() : WebMvcConfigurerAdapter() {
-    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
-        //tyvm harrison
-        registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
-
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
-
-    }
-}
