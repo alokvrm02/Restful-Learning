@@ -2,6 +2,7 @@ package com.dgkrajnik.kotlinREST
 
 import com.dgkrajnik.kotlinREST.REST.Errors.EntityNotFoundException
 import com.dgkrajnik.kotlinREST.REST.Errors.ValidationFailedException
+import com.dgkrajnik.kotlinREST.REST.SpringHelloController
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -46,7 +47,7 @@ class HelloControllerUnitTest {
 
     @Test
     fun testSpringOAuthData() {
-        var result = helloController.helloOAuthData()
+        val result = helloController.helloOAuthData()
         assertNotNull(result)
         assertEquals(HelloData("Hello, OAuth!"), result)
     }
