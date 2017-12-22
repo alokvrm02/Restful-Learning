@@ -9,6 +9,7 @@ import org.springframework.security.access.AccessDeniedException as SpringAccess
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
+import org.springframework.web.servlet.NoHandlerFoundException
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 /**
@@ -22,6 +23,14 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
     override fun handleHttpMessageNotReadable(ex: HttpMessageNotReadableException, headers: HttpHeaders, status: HttpStatus, request: WebRequest): ResponseEntity<Any> {
         val error = "Malformed JSON Request"
         return buildResponseEntity(ApiErrorBuilder(HttpStatus.BAD_REQUEST, error, ex).build())
+    }
+
+    /**
+     * Handler for spring-thrown exceptions when a client tries to access a nonexistent resource/endpoint.
+     */
+    override fun handleNoHandlerFoundException(ex: NoHandlerFoundException, headers: HttpHeaders, status: HttpStatus, request: WebRequest): ResponseEntity<Any> {
+        val error = "Resource Not Found"
+        return buildResponseEntity(ApiErrorBuilder(HttpStatus.NOT_FOUND, error, ex).build())
     }
 
     /**

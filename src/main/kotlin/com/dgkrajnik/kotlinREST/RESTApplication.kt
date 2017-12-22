@@ -10,14 +10,19 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.actuate.audit.listener.AuditApplicationEvent
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.EnableAspectJAutoProxy
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.stereotype.Controller
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
+import org.springframework.web.servlet.resource.ResourceHttpRequestHandler
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 import java.security.Principal
 import java.text.SimpleDateFormat
@@ -129,3 +134,16 @@ data class HelloData(val message: String)
  * A shim for testing out sending some automatically de/serialised data.
  */
 data class ShimData(val jsonshim: String)
+
+@Configuration
+class notWorking() : WebMvcConfigurerAdapter() {
+    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
+        //tyvm harrison
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+
+    }
+}
