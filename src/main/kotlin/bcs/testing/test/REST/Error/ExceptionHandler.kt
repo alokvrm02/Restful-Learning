@@ -7,13 +7,20 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.NoHandlerFoundException
-import org.springframework.web.servlet.config.annotation.EnableWebMvc
+import javax.validation.ConstraintViolationException
+
 
 @RestControllerAdvice
-@EnableWebMvc
 class GlobalControllerExceptionHandler {
 
     val log = KotlinLogging.logger {  }
+
+    @ExceptionHandler(ConstraintViolationException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun constraintViolationException(ex: ConstraintViolationException): ErrorResponse {
+        log.info{ "Bad Request - 5001"}
+        return ErrorResponse(500, 5001, ex.message)
+    }
 
     @ExceptionHandler(NoHandlerFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -25,7 +32,8 @@ class GlobalControllerExceptionHandler {
     @ExceptionHandler(Exception::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun unknownException(ex: Exception, req: WebRequest): ErrorResponse {
-        log.info { "Unhandled Error - 5001" }
-        return ErrorResponse(500, 5001, ex.message)
+        log.info { "Unhandled Error - 5002" }
+        return ErrorResponse(500, 5002, ex.message)
     }
+
 }
