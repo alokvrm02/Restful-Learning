@@ -17,10 +17,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore
 import javax.inject.Inject
 
-/**
- * This file configures the web security
- */
-
+// This file is used to configure web security, enabling oauth2 with in memory users.
 @Order(101)
 @Configuration
 @EnableWebSecurity

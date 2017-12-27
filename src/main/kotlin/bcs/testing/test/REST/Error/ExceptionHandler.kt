@@ -9,7 +9,7 @@ import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.NoHandlerFoundException
 import javax.validation.ConstraintViolationException
 
-
+// This file is used to catch exceptions and log them correctly.
 @RestControllerAdvice
 class GlobalControllerExceptionHandler {
 

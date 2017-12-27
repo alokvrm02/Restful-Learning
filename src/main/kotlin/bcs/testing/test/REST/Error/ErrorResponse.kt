@@ -1,5 +1,6 @@
 package bcs.testing.test.REST.Error
 
+// Class to hold errors that will be thrown
 class ErrorResponse constructor(private val status: Int, private val code: Int, private val message: String?) {
     fun getStatus(): Int {
         return this.status

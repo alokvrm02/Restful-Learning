@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import javax.inject.Inject
 
+// This file is the main controller of the application, showing
+// which routes should serve a resource.
 @RestController
 @RequestMapping("hello") // /hello route
 class HelloController {

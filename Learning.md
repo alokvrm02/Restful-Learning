@@ -1,8 +1,15 @@
 # Learning
 
+Spring boot is the create-react-app of Spring.
+
 Security w/ Oauth2.0
 - In memory is used in this tutorial. No need for a database. http://javabycode.com/spring-framework-tutorial/spring-security/secure-spring-rest-api-using-spring-security-oauth2-example.html
 - ![](http://www.bubblecode.net/wp-content/uploads/2013/03/password.png)
+- Oauth2 is a protocol used to allow applications limited access to a users information on another service.
+The user authorises the client application to access the resource. This happens through an authorisation server and resource server.
+Each client application has its own client-id and client-secret used in communicating with the authentication/resource servers to determine it really is an authorised client.
+Depending on the implementation, the user gives the application the information to authorise itself, or the user can authorise with authorisation server directly(which is better).
+
 
 Testing Oauth
 - https://docs.spring.io/spring-security/site/docs/current/reference/html/test-mockmvc.html
@@ -46,5 +53,8 @@ MVC
     - Controller: Routing
 
 Token Store
+- An interface used for Oauth in reading/accessing/storing/removing access tokens.
 
 JDBC
+- Java Database Connectivity
+- API used by Java in accessing databases(sql)

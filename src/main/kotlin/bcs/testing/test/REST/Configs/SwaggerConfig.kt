@@ -14,12 +14,9 @@ import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger.web.ApiKeyVehicle
 import springfox.documentation.swagger.web.SecurityConfiguration
 
-/**
- * Holder for Springfox's Swagger2 configuration.
- */
+// This file holds Springfox's Swagger2 configuration.
 @Configuration
 class SwaggerConfig {
-
     // Docket = A summary or other brief statement of the contents of a document; an abstract.
     @Bean
     fun swaggerSpringMvcPlugin(): Docket {
@@ -39,9 +36,6 @@ class SwaggerConfig {
         )
     }
 
-    /**
-     * Configure Springfox's option to automatically place an oauth login button on HTML documentation.
-     */
     private fun securitySchema(): OAuth {
         val loginEndpoint: LoginEndpoint = LoginEndpoint("/oauth/authorize")
         val grantType: GrantType = ImplicitGrant(loginEndpoint, "swaggerAuth")
@@ -57,11 +51,9 @@ class SwaggerConfig {
         return listOf(SecurityReference("oauth2", arrayOf(authorizationScope)))
     }
 
-    /**
-     * Configure Springfox's auth details.
-     */
     @Bean
     fun securityInfo(): SecurityConfiguration {
-        return SecurityConfiguration("trusted-client", "secret", "realm", "spring-hello", "", ApiKeyVehicle.HEADER, "api_key",",");
+        return SecurityConfiguration("trusted-client", "secret", "realm", "spring-hello",
+                "", ApiKeyVehicle.HEADER, "api_key",",")
     }
 }

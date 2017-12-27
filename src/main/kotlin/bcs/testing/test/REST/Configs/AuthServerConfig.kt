@@ -12,6 +12,8 @@ import org.springframework.security.oauth2.provider.approval.UserApprovalHandler
 import org.springframework.security.oauth2.provider.token.TokenStore
 import javax.inject.Inject
 
+// This file is the configuration details for the authorisation server.
+// Client information is used in memory to reduce unnecessary complexity of a db(in practise use a db).
 @Configuration
 @EnableAuthorizationServer
 class AuthServerOauth2Config : AuthorizationServerConfigurerAdapter() {
@@ -35,11 +37,11 @@ class AuthServerOauth2Config : AuthorizationServerConfigurerAdapter() {
 
     override fun configure(clients: ClientDetailsServiceConfigurer) {
         clients.inMemory()
-                .withClient("trusted-client")
+                .withClient("trusted-client") // CLIENT
                 .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit")
                 .authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
                 .scopes("read", "write", "trust")
-                .secret("secret")
+                .secret("secret") // SECRET
                 .accessTokenValiditySeconds(300)//invalid after 5 minutes.
                 .refreshTokenValiditySeconds(600)//refresh after 10 minutes.
     }
