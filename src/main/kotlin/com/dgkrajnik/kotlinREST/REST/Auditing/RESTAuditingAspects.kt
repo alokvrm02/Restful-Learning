@@ -58,6 +58,7 @@ class AuditAspect {
      */
     @AfterThrowing("@annotation(auditable) && args(httpRequest, principal)", throwing="ex")
     fun logFailure(auditable: Auditable, httpRequest: HttpServletRequest, principal: Principal?, ex: Exception) {
+
         applicationEventPublisher.publishEvent(AuditApplicationEvent(
                 Date(),
                 principal?.name ?: "anon",

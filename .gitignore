@@ -112,3 +112,6 @@ gradle-app.setting
 
 # Testing/dev databases folder.
 dbs/
+
+# Keyfiles, which actually shouldn't even be here either.
+*.pkcs12

@@ -1,6 +1,7 @@
 package com.dgkrajnik.kotlinREST.REST.Security
 
 import com.dgkrajnik.kotlinREST.Auth.AuthorizationServerSecurityConfiguration
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -25,6 +26,9 @@ import javax.sql.DataSource
 @Configuration
 @EnableResourceServer
 class WebSecurityConfig : ResourceServerConfigurerAdapter() {
+    @Value("\${restful.resource.check_token_url}")
+    private lateinit var tokenURL: String
+
     /**
      * Configure the resource server to poll the auth server to check tokens.
      *
@@ -36,8 +40,7 @@ class WebSecurityConfig : ResourceServerConfigurerAdapter() {
         val tokenService = RemoteTokenServices()
         // Note that, because the server port is set *after*
         // the beans get constructed, you can't just use local.server.port.
-        tokenService.setCheckTokenEndpointUrl(
-                "http://localhost:8080/oauth/check_token")
+        tokenService.setCheckTokenEndpointUrl(tokenURL)
         tokenService.setClientId("normalClient")
         tokenService.setClientSecret("spookysecret")
         return tokenService
