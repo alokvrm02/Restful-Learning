@@ -1,10 +1,9 @@
-package model.Service;
+package spring.pry.springbootrestful.model.Service;
 
 import java.util.Hashtable;
 
 import org.springframework.stereotype.Service;
-import org.springframework.stereotype.Service;
-import model.person;
+import spring.pry.springbootrestful.model.person;
 
 @Service
 public class PersonService {
@@ -15,8 +14,8 @@ public class PersonService {
         p.setId("1");
         p.setFirstname("Priyanka");
         p.setLastname("Sharma");
-        p.setage(27);
-        person.put("1", p);
+        p.setAge(27);
+        persons.put("1", p);
 
 
         p = new person();
@@ -24,7 +23,7 @@ public class PersonService {
         p.setFirstname("Chirag");
         p.setLastname("Sharma");
         p.setAge(29);
-        person.put("2", p);
+        persons.put("2", p);
     }
 
     public person getPerson(String id) {

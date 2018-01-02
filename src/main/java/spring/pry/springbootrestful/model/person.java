@@ -1,4 +1,4 @@
-package model;
+package spring.pry.springbootrestful.model;
 
 public class person
 {
@@ -39,13 +39,4 @@ public class person
         this.age = age;
     }
 
-    public void setage(int age) {
-        this.age = age;
     }
-
-    public static void setput(String s, person p) {
-    }
-
-    public static void put(String s, person p) {
-    }
-}
